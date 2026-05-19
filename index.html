@@ -40,6 +40,24 @@
       letter-spacing: -0.5px;
     }
 
+    .admin-link {
+      display: none;
+      text-align: right;
+      margin-bottom: 1rem;
+    }
+
+    .admin-link a {
+      font-size: 0.85rem;
+      color: #999;
+      text-decoration: none;
+      cursor: pointer;
+      padding: 0.3rem 0.6rem;
+    }
+
+    .admin-link a:hover {
+      color: #1b5e3f;
+    }
+
     .subtitle {
       text-align: center;
       color: #666;
@@ -95,6 +113,7 @@
 
     input[type="text"],
     input[type="email"],
+    input[type="password"],
     textarea {
       width: 100%;
       padding: 0.95rem 1rem;
@@ -110,6 +129,7 @@
 
     input[type="text"]:focus,
     input[type="email"]:focus,
+    input[type="password"]:focus,
     textarea:focus {
       outline: none;
       border-color: #1b5e3f;
@@ -214,12 +234,6 @@
       transform: translateY(0);
     }
 
-    .submit-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
-    }
-
     .reset-btn {
       background-color: #f0ebe5;
       color: #1b5e3f;
@@ -272,18 +286,165 @@
       font-size: 3.5rem;
       color: #1b5e3f;
       margin-bottom: 1.5rem;
-      animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    @keyframes scaleIn {
-      from {
-        opacity: 0;
-        transform: scale(0.5);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+    .admin-panel {
+      display: none;
+    }
+
+    .admin-panel.show {
+      display: block;
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .admin-header h2 {
+      font-size: 1.8rem;
+      color: #1b5e3f;
+    }
+
+    .logout-btn {
+      padding: 0.6rem 1.2rem;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .logout-btn:hover {
+      background-color: #c9423f;
+    }
+
+    .admin-stats {
+      background-color: #f0f8f5;
+      border: 2px solid #1b5e3f;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-item {
+      font-size: 1rem;
+      color: #2c3e2d;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-item strong {
+      color: #1b5e3f;
+      font-weight: 700;
+    }
+
+    .download-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .download-btn {
+      flex: 1;
+      padding: 1rem;
+      background-color: #1b5e3f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .download-btn:hover {
+      background-color: #154a32;
+    }
+
+    .clear-btn {
+      padding: 1rem;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .clear-btn:hover {
+      background-color: #c9423f;
+    }
+
+    .responses-table {
+      overflow-x: auto;
+      background-color: #fefdfb;
+      border: 2px solid #e0dbd4;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .responses-table table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .responses-table th {
+      background-color: #1b5e3f;
+      color: white;
+      padding: 0.8rem;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid #154a32;
+    }
+
+    .responses-table td {
+      padding: 0.8rem;
+      border-bottom: 1px solid #e0dbd4;
+      word-break: break-word;
+      max-width: 200px;
+    }
+
+    .responses-table tr:hover {
+      background-color: #f5f3f0;
+    }
+
+    .login-form {
+      background-color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(27, 94, 63, 0.08);
+    }
+
+    .login-form h2 {
+      font-size: 1.8rem;
+      color: #1b5e3f;
+      margin-bottom: 1.5rem;
+    }
+
+    .login-form input {
+      max-width: 300px;
+      margin: 0 auto 1rem;
+    }
+
+    .login-form button {
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .login-error {
+      color: #d9534f;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .login-error.show {
+      display: block;
     }
 
     @media (max-width: 640px) {
@@ -297,311 +458,390 @@
 
       .form-wrapper {
         padding: 2rem 1.5rem;
-        border-radius: 10px;
-      }
-
-      label {
-        font-size: 0.98rem;
       }
 
       .button-container {
         flex-direction: column;
-        gap: 0.75rem;
       }
 
-      button {
-        padding: 1rem 1.2rem;
+      .download-buttons {
+        flex-direction: column;
       }
 
-      .header-section {
-        margin-bottom: 2rem;
-        padding-bottom: 1.5rem;
+      .responses-table {
+        font-size: 0.8rem;
+      }
+
+      .responses-table td {
+        max-width: 100px;
+        padding: 0.5rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="admin-link" id="adminLink">
+      <a onclick="showLoginPrompt()">Admin</a>
+    </div>
+
     <div class="header-section">
       <h1>FBS Peer Group Weekly Digest Builder</h1>
       <p class="subtitle">Answer as many of these questions as you like.</p>
     </div>
 
     <div class="form-wrapper">
-      <form id="digestForm" method="POST" action="https://script.google.com/macros/s/AKfycbwXgNSTYFY7V74V5U_q2bnh54aFhBJ1okkq3g8_N7IYK9dj45QTowovznKPXjCcCZ7T3Q/useweb" target="submitFrame" onsubmit="handleSubmit(event)">
+      <!-- MAIN FORM -->
+      <div id="mainForm">
+        <form id="digestForm">
+          <div class="form-section">
+            <label for="name">Your name <span class="required">*</span></label>
+            <input type="text" id="name" name="name" required>
+            <div class="form-error" id="nameError">Please enter your name.</div>
+          </div>
 
-        <div class="form-section">
-          <label for="name">Your name <span class="required">*</span></label>
-          <input type="text" id="name" name="name" required>
-          <div class="form-error" id="nameError">Please enter your name.</div>
-        </div>
+          <div class="form-section">
+            <label for="email">Your email address <span class="required">*</span></label>
+            <input type="email" id="email" name="email" required>
+            <div class="form-error" id="emailError">Please enter a valid email address.</div>
+          </div>
 
-        <div class="form-section">
-          <label for="email">Your email address <span class="required">*</span></label>
-          <input type="email" id="email" name="email" required>
-          <div class="form-error" id="emailError">Please enter a valid email address.</div>
-        </div>
+          <div class="form-section">
+            <label for="q3">What should your weekly digest watch for?</label>
+            <textarea id="q3" name="q3"></textarea>
+          </div>
 
-        <div class="form-section">
-          <label for="q3">What should your weekly digest watch for?</label>
-          <textarea id="q3" name="q3"></textarea>
-        </div>
+          <div class="form-section">
+            <label for="q4">What makes an item important enough to include?</label>
+            <textarea id="q4" name="q4"></textarea>
+          </div>
 
-        <div class="form-section">
-          <label for="q4">What makes an item important enough to include?</label>
-          <textarea id="q4" name="q4"></textarea>
-        </div>
+          <div class="form-section">
+            <label for="q5">What would waste your time?</label>
+            <textarea id="q5" name="q5"></textarea>
+          </div>
 
-        <div class="form-section">
-          <label for="q5">What would waste your time?</label>
-          <textarea id="q5" name="q5"></textarea>
-        </div>
+          <div class="form-section">
+            <label for="q6">What geographic area should it cover?</label>
+            <textarea id="q6" name="q6"></textarea>
+            <p class="helper-text">Towns, counties, states, service area, driving distance, or regions that matter.</p>
+          </div>
 
-        <div class="form-section">
-          <label for="q6">What geographic area should it cover?</label>
-          <textarea id="q6" name="q6"></textarea>
-          <p class="helper-text">Towns, counties, states, service area, driving distance, or regions that matter.</p>
-        </div>
+          <div class="form-section">
+            <label for="q7">What organizations should we monitor?</label>
+            <textarea id="q7" name="q7"></textarea>
+            <p class="helper-text">Towns, agencies, nonprofits, land trusts, contractors, customer groups, etc.</p>
+          </div>
 
-        <div class="form-section">
-          <label for="q7">What organizations should we monitor?</label>
-          <textarea id="q7" name="q7"></textarea>
-          <p class="helper-text">Towns, agencies, nonprofits, land trusts, contractors, customer groups, etc.</p>
-        </div>
+          <div class="form-section">
+            <label for="q8">What business decisions are coming in 6 months?</label>
+            <textarea id="q8" name="q8"></textarea>
+            <p class="helper-text">Pricing, hiring, equipment, services, funding, etc.</p>
+          </div>
 
-        <div class="form-section">
-          <label for="q8">What business decisions are coming in 6 months?</label>
-          <textarea id="q8" name="q8"></textarea>
-          <p class="helper-text">Pricing, hiring, equipment, services, funding, etc.</p>
-        </div>
+          <div class="form-section">
+            <label for="q9">What would cause you to take action?</label>
+            <textarea id="q9" name="q9"></textarea>
+            <p class="helper-text">Call, email, bid, apply, schedule change, etc.</p>
+          </div>
 
-        <div class="form-section">
-          <label for="q9">What would cause you to take action?</label>
-          <textarea id="q9" name="q9"></textarea>
-          <p class="helper-text">Call, email, bid, apply, schedule change, etc.</p>
-        </div>
+          <div class="form-section">
+            <label for="q10">What sources do you already trust?</label>
+            <textarea id="q10" name="q10"></textarea>
+            <p class="helper-text">Websites, newsletters, agencies, podcasts, calendars, people.</p>
+          </div>
 
-        <div class="form-section">
-          <label for="q10">What sources do you already trust?</label>
-          <textarea id="q10" name="q10"></textarea>
-          <p class="helper-text">Websites, newsletters, agencies, podcasts, calendars, people.</p>
-        </div>
+          <div class="form-section">
+            <label for="q11">What search terms should trigger attention?</label>
+            <textarea id="q11" name="q11"></textarea>
+            <p class="helper-text">Invasive plants, grants, town names, specific orgs.</p>
+          </div>
 
-        <div class="form-section">
-          <label for="q11">What search terms should trigger attention?</label>
-          <textarea id="q11" name="q11"></textarea>
-          <p class="helper-text">Invasive plants, grants, town names, specific orgs.</p>
-        </div>
+          <div class="form-section">
+            <label for="q12">What should usually be excluded?</label>
+            <textarea id="q12" name="q12"></textarea>
+            <p class="helper-text">Terms that sound related but aren't useful to you.</p>
+          </div>
 
-        <div class="form-section">
-          <label for="q12">What should usually be excluded?</label>
-          <textarea id="q12" name="q12"></textarea>
-          <p class="helper-text">Terms that sound related but aren't useful to you.</p>
-        </div>
+          <div class="form-section">
+            <label for="q13">What seasonal conditions matter?</label>
+            <textarea id="q13" name="q13"></textarea>
+            <p class="helper-text">Mud season, freeze/thaw, road postings, planting windows.</p>
+          </div>
 
-        <div class="form-section">
-          <label for="q13">What seasonal conditions matter?</label>
-          <textarea id="q13" name="q13"></textarea>
-          <p class="helper-text">Mud season, freeze/thaw, road postings, planting windows.</p>
-        </div>
-
-        <div class="form-section">
-          <label>What kinds of opportunities?</label>
-          <div class="checkbox-group">
-            <div class="checkbox-item">
-              <input type="checkbox" id="opp1" name="opportunities" value="Project leads">
-              <label for="opp1">Project leads</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="opp2" name="opportunities" value="RFPs or bid opportunities">
-              <label for="opp2">RFPs or bid opportunities</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="opp3" name="opportunities" value="Grants">
-              <label for="opp3">Grants</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="opp4" name="opportunities" value="Loans or financing">
-              <label for="opp4">Loans or financing</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="opp5" name="opportunities" value="Cost-share programs">
-              <label for="opp5">Cost-share programs</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="opp6" name="opportunities" value="Technical assistance">
-              <label for="opp6">Technical assistance</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="opp7" name="opportunities" value="Training or workshops">
-              <label for="opp7">Training or workshops</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="opp8" name="opportunities" value="Equipment for sale">
-              <label for="opp8">Equipment for sale or auction</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="opp9" name="opportunities" value="Market trends">
-              <label for="opp9">Market trends</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="opp10" name="opportunities" value="Policy changes">
-              <label for="opp10">Policy changes</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="opp11" name="opportunities" value="Regulatory updates">
-              <label for="opp11">Regulatory or permitting updates</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="opp12" name="opportunities" value="Examples from similar businesses">
-              <label for="opp12">Examples from similar businesses</label>
+          <div class="form-section">
+            <label>What kinds of opportunities?</label>
+            <div class="checkbox-group">
+              <div class="checkbox-item"><input type="checkbox" id="opp1" name="opportunities" value="Project leads"><label for="opp1">Project leads</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="opp2" name="opportunities" value="RFPs or bid opportunities"><label for="opp2">RFPs or bid opportunities</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="opp3" name="opportunities" value="Grants"><label for="opp3">Grants</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="opp4" name="opportunities" value="Loans or financing"><label for="opp4">Loans or financing</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="opp5" name="opportunities" value="Cost-share programs"><label for="opp5">Cost-share programs</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="opp6" name="opportunities" value="Technical assistance"><label for="opp6">Technical assistance</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="opp7" name="opportunities" value="Training or workshops"><label for="opp7">Training or workshops</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="opp8" name="opportunities" value="Equipment for sale"><label for="opp8">Equipment for sale or auction</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="opp9" name="opportunities" value="Market trends"><label for="opp9">Market trends</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="opp10" name="opportunities" value="Policy changes"><label for="opp10">Policy changes</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="opp11" name="opportunities" value="Regulatory updates"><label for="opp11">Regulatory or permitting updates</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="opp12" name="opportunities" value="Examples from similar businesses"><label for="opp12">Examples from similar businesses</label></div>
             </div>
           </div>
-        </div>
 
-        <div class="form-section">
-          <label>Business topics to focus on?</label>
-          <div class="checkbox-group">
-            <div class="checkbox-item">
-              <input type="checkbox" id="topic1" name="topics" value="Pricing">
-              <label for="topic1">Pricing</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="topic2" name="topics" value="Hiring">
-              <label for="topic2">Hiring</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="topic3" name="topics" value="Marketing">
-              <label for="topic3">Marketing</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="topic4" name="topics" value="Cash flow">
-              <label for="topic4">Cash flow</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="topic5" name="topics" value="Insurance">
-              <label for="topic5">Insurance</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="topic6" name="topics" value="Safety">
-              <label for="topic6">Safety</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="topic7" name="topics" value="Equipment purchase">
-              <label for="topic7">Equipment purchase</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="topic8" name="topics" value="Scheduling">
-              <label for="topic8">Scheduling</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="topic9" name="topics" value="Compliance">
-              <label for="topic9">Compliance</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="topic10" name="topics" value="Customer follow-up">
-              <label for="topic10">Customer follow-up</label>
+          <div class="form-section">
+            <label>Business topics to focus on?</label>
+            <div class="checkbox-group">
+              <div class="checkbox-item"><input type="checkbox" id="topic1" name="topics" value="Pricing"><label for="topic1">Pricing</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="topic2" name="topics" value="Hiring"><label for="topic2">Hiring</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="topic3" name="topics" value="Marketing"><label for="topic3">Marketing</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="topic4" name="topics" value="Cash flow"><label for="topic4">Cash flow</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="topic5" name="topics" value="Insurance"><label for="topic5">Insurance</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="topic6" name="topics" value="Safety"><label for="topic6">Safety</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="topic7" name="topics" value="Equipment purchase"><label for="topic7">Equipment purchase</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="topic8" name="topics" value="Scheduling"><label for="topic8">Scheduling</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="topic9" name="topics" value="Compliance"><label for="topic9">Compliance</label></div>
+              <div class="checkbox-item"><input type="checkbox" id="topic10" name="topics" value="Customer follow-up"><label for="topic10">Customer follow-up</label></div>
             </div>
           </div>
-        </div>
 
-        <div class="form-section">
-          <label>How long should the weekly email be?</label>
-          <div class="radio-group">
-            <div class="radio-item">
-              <input type="radio" id="length1" name="emailLength" value="Very short: top 3 items only">
-              <label for="length1">Very short (top 3 items)</label>
-            </div>
-            <div class="radio-item">
-              <input type="radio" id="length2" name="emailLength" value="Short: 5–7 useful items">
-              <label for="length2">Short (5–7 items)</label>
-            </div>
-            <div class="radio-item">
-              <input type="radio" id="length3" name="emailLength" value="Medium: sections with brief explanation">
-              <label for="length3">Medium with explanations</label>
-            </div>
-            <div class="radio-item">
-              <input type="radio" id="length4" name="emailLength" value="Detailed: more context and links">
-              <label for="length4">Detailed with context</label>
-            </div>
-            <div class="radio-item">
-              <input type="radio" id="length5" name="emailLength" value="No preference">
-              <label for="length5">No preference</label>
+          <div class="form-section">
+            <label>How long should the weekly email be?</label>
+            <div class="radio-group">
+              <div class="radio-item"><input type="radio" id="length1" name="emailLength" value="Very short: top 3 items only"><label for="length1">Very short (top 3 items)</label></div>
+              <div class="radio-item"><input type="radio" id="length2" name="emailLength" value="Short: 5–7 useful items"><label for="length2">Short (5–7 items)</label></div>
+              <div class="radio-item"><input type="radio" id="length3" name="emailLength" value="Medium: sections with brief explanation"><label for="length3">Medium with explanations</label></div>
+              <div class="radio-item"><input type="radio" id="length4" name="emailLength" value="Detailed: more context and links"><label for="length4">Detailed with context</label></div>
+              <div class="radio-item"><input type="radio" id="length5" name="emailLength" value="No preference"><label for="length5">No preference</label></div>
             </div>
           </div>
-        </div>
 
-        <div class="form-section">
-          <label>How much explanation per item?</label>
-          <div class="radio-group">
-            <div class="radio-item">
-              <input type="radio" id="explain1" name="emailExplanation" value="One-line summary and link">
-              <label for="explain1">One-line summary and link</label>
-            </div>
-            <div class="radio-item">
-              <input type="radio" id="explain2" name="emailExplanation" value="Short summary, why it matters, and link">
-              <label for="explain2">Why it matters and link</label>
-            </div>
-            <div class="radio-item">
-              <input type="radio" id="explain3" name="emailExplanation" value="Enough explanation that I do not need to click every link">
-              <label for="explain3">Full explanation without clicking</label>
-            </div>
-            <div class="radio-item">
-              <input type="radio" id="explain4" name="emailExplanation" value="Depends on the item">
-              <label for="explain4">Depends on the item</label>
+          <div class="form-section">
+            <label>How much explanation per item?</label>
+            <div class="radio-group">
+              <div class="radio-item"><input type="radio" id="explain1" name="emailExplanation" value="One-line summary and link"><label for="explain1">One-line summary and link</label></div>
+              <div class="radio-item"><input type="radio" id="explain2" name="emailExplanation" value="Short summary, why it matters, and link"><label for="explain2">Why it matters and link</label></div>
+              <div class="radio-item"><input type="radio" id="explain3" name="emailExplanation" value="Enough explanation that I do not need to click every link"><label for="explain3">Full explanation without clicking</label></div>
+              <div class="radio-item"><input type="radio" id="explain4" name="emailExplanation" value="Depends on the item"><label for="explain4">Depends on the item</label></div>
             </div>
           </div>
-        </div>
 
-        <div class="form-section">
-          <label>Urgent items—immediate or weekly?</label>
-          <div class="radio-group">
-            <div class="radio-item">
-              <input type="radio" id="urgent1" name="urgentHandling" value="Send urgent items immediately">
-              <label for="urgent1">Send urgent items immediately</label>
-            </div>
-            <div class="radio-item">
-              <input type="radio" id="urgent2" name="urgentHandling" value="Hold everything for the weekly digest">
-              <label for="urgent2">Hold everything for weekly digest</label>
-            </div>
-            <div class="radio-item">
-              <input type="radio" id="urgent3" name="urgentHandling" value="Send immediately only for deadlines or unusually strong opportunities">
-              <label for="urgent3">Immediately only for deadlines</label>
-            </div>
-            <div class="radio-item">
-              <input type="radio" id="urgent4" name="urgentHandling" value="Not sure">
-              <label for="urgent4">Not sure</label>
+          <div class="form-section">
+            <label>Urgent items—immediate or weekly?</label>
+            <div class="radio-group">
+              <div class="radio-item"><input type="radio" id="urgent1" name="urgentHandling" value="Send urgent items immediately"><label for="urgent1">Send urgent items immediately</label></div>
+              <div class="radio-item"><input type="radio" id="urgent2" name="urgentHandling" value="Hold everything for the weekly digest"><label for="urgent2">Hold everything for weekly digest</label></div>
+              <div class="radio-item"><input type="radio" id="urgent3" name="urgentHandling" value="Send immediately only for deadlines or unusually strong opportunities"><label for="urgent3">Immediately only for deadlines</label></div>
+              <div class="radio-item"><input type="radio" id="urgent4" name="urgentHandling" value="Not sure"><label for="urgent4">Not sure</label></div>
             </div>
           </div>
+
+          <div class="form-section">
+            <label for="q19">Anything else we should know?</label>
+            <textarea id="q19" name="q19" placeholder="Additional preferences or notes..."></textarea>
+          </div>
+
+          <div class="button-container">
+            <button type="submit" class="submit-btn">Submit Profile</button>
+            <button type="reset" class="reset-btn">Clear</button>
+          </div>
+        </form>
+
+        <div class="thank-you" id="thankYou">
+          <div class="check-mark">✓</div>
+          <h2>Thank you!</h2>
+          <p>Your digest profile has been saved.</p>
+          <p>We'll use your answers to create a weekly digest tailored to your business.</p>
+        </div>
+      </div>
+
+      <!-- ADMIN PANEL -->
+      <div class="admin-panel" id="adminPanel">
+        <div class="login-form" id="loginForm">
+          <h2>Admin Login</h2>
+          <input type="password" id="pinInput" placeholder="Enter PIN" maxlength="4">
+          <button onclick="checkPin()">Login</button>
+          <div class="login-error" id="loginError">Incorrect PIN</div>
         </div>
 
-        <div class="form-section">
-          <label for="q19">Anything else we should know?</label>
-          <textarea id="q19" name="q19" placeholder="Additional preferences or notes..."></textarea>
+        <div id="adminContent" style="display: none;">
+          <div class="admin-header">
+            <h2>Admin Dashboard</h2>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+          </div>
+
+          <div class="admin-stats">
+            <div class="stat-item">Total responses: <strong id="responseCount">0</strong></div>
+            <div class="stat-item">Last response: <strong id="lastResponse">None yet</strong></div>
+          </div>
+
+          <div class="download-buttons">
+            <button class="download-btn" onclick="downloadCSV()">Download as CSV</button>
+            <button class="download-btn" onclick="downloadJSON()">Download as JSON</button>
+          </div>
+
+          <button class="clear-btn" onclick="clearAllResponses()">Clear All Responses</button>
+
+          <div class="responses-table">
+            <table id="responsesTable">
+              <thead>
+                <tr>
+                  <th>Submitted</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody id="responsesList">
+              </tbody>
+            </table>
+          </div>
         </div>
-
-        <input type="hidden" name="timestamp" id="timestamp">
-
-        <div class="button-container">
-          <button type="submit" class="submit-btn">Submit Profile</button>
-          <button type="reset" class="reset-btn">Clear</button>
-        </div>
-      </form>
-
-      <div class="thank-you" id="thankYou">
-        <div class="check-mark">✓</div>
-        <h2>Thank you!</h2>
-        <p>Your digest profile has been saved.</p>
-        <p>We'll use your answers to create a weekly digest tailored to your business.</p>
       </div>
     </div>
   </div>
 
-  <iframe name="submitFrame" style="display:none;"></iframe>
-
   <script>
-    function handleSubmit(event) {
-      const form = document.getElementById("digestForm");
+    const PIN = "1802";
+    let isAdminLoggedIn = false;
+
+    const form = document.getElementById("digestForm");
+    const thankYouDiv = document.getElementById("thankYou");
+
+    function loadResponses() {
+      const stored = localStorage.getItem("fbs_responses");
+      return stored ? JSON.parse(stored) : [];
+    }
+
+    function saveResponse(data) {
+      const responses = loadResponses();
+      responses.push(data);
+      localStorage.setItem("fbs_responses", JSON.stringify(responses));
+    }
+
+    function showLoginPrompt() {
+      document.getElementById("mainForm").style.display = "none";
+      document.getElementById("adminPanel").classList.add("show");
+      document.getElementById("pinInput").focus();
+    }
+
+    function checkPin() {
+      const pin = document.getElementById("pinInput").value;
+      const error = document.getElementById("loginError");
+
+      if (pin === PIN) {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("adminContent").style.display = "block";
+        isAdminLoggedIn = true;
+        updateAdminDisplay();
+      } else {
+        error.classList.add("show");
+      }
+    }
+
+    function logout() {
+      isAdminLoggedIn = false;
+      document.getElementById("mainForm").style.display = "block";
+      document.getElementById("adminPanel").classList.remove("show");
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("adminContent").style.display = "none";
+      document.getElementById("loginError").classList.remove("show");
+      document.getElementById("pinInput").value = "";
+    }
+
+    function updateAdminDisplay() {
+      const responses = loadResponses();
+      document.getElementById("responseCount").textContent = responses.length;
+
+      if (responses.length > 0) {
+        const last = responses[responses.length - 1];
+        const date = new Date(last.timestamp).toLocaleString();
+        document.getElementById("lastResponse").textContent = date;
+      }
+
+      const tbody = document.getElementById("responsesList");
+      tbody.innerHTML = "";
+      responses.forEach((resp, idx) => {
+        const row = tbody.insertRow();
+        const dateCell = row.insertCell(0);
+        const nameCell = row.insertCell(1);
+        const emailCell = row.insertCell(2);
+
+        dateCell.textContent = new Date(resp.timestamp).toLocaleString();
+        nameCell.textContent = resp.name;
+        emailCell.textContent = resp.email;
+      });
+    }
+
+    function downloadCSV() {
+      const responses = loadResponses();
+      if (responses.length === 0) {
+        alert("No responses to download");
+        return;
+      }
+
+      const headers = ["Timestamp", "Name", "Email", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12", "Q13", "Opportunities", "Topics", "Email Length", "Email Explanation", "Urgent Handling", "Q19"];
+      let csv = headers.join(",") + "\n";
+
+      responses.forEach(resp => {
+        const row = [
+          resp.timestamp,
+          resp.name,
+          resp.email,
+          resp.q3,
+          resp.q4,
+          resp.q5,
+          resp.q6,
+          resp.q7,
+          resp.q8,
+          resp.q9,
+          resp.q10,
+          resp.q11,
+          resp.q12,
+          resp.q13,
+          resp.opportunities,
+          resp.topics,
+          resp.emailLength,
+          resp.emailExplanation,
+          resp.urgentHandling,
+          resp.q19
+        ].map(cell => `"${(cell || "").replace(/"/g, '""')}"`);
+        csv += row.join(",") + "\n";
+      });
+
+      downloadFile(csv, "fbs-responses.csv", "text/csv");
+    }
+
+    function downloadJSON() {
+      const responses = loadResponses();
+      if (responses.length === 0) {
+        alert("No responses to download");
+        return;
+      }
+
+      const json = JSON.stringify(responses, null, 2);
+      downloadFile(json, "fbs-responses.json", "application/json");
+    }
+
+    function downloadFile(content, filename, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function clearAllResponses() {
+      if (confirm("Are you sure? This will delete all responses.")) {
+        localStorage.removeItem("fbs_responses");
+        updateAdminDisplay();
+      }
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
       const nameInput = document.getElementById("name");
       const emailInput = document.getElementById("email");
       const nameError = document.getElementById("nameError");
@@ -622,23 +862,47 @@
         isValid = false;
       }
 
-      if (!isValid) {
-        event.preventDefault();
-        return;
-      }
+      if (!isValid) return;
 
-      document.getElementById("timestamp").value = new Date().toISOString();
+      const formData = new FormData(form);
+      const response = {
+        timestamp: new Date().toISOString(),
+        name: formData.get("name"),
+        email: formData.get("email"),
+        q3: formData.get("q3") || "",
+        q4: formData.get("q4") || "",
+        q5: formData.get("q5") || "",
+        q6: formData.get("q6") || "",
+        q7: formData.get("q7") || "",
+        q8: formData.get("q8") || "",
+        q9: formData.get("q9") || "",
+        q10: formData.get("q10") || "",
+        q11: formData.get("q11") || "",
+        q12: formData.get("q12") || "",
+        q13: formData.get("q13") || "",
+        opportunities: formData.getAll("opportunities").join("; ") || "",
+        topics: formData.getAll("topics").join("; ") || "",
+        emailLength: formData.get("emailLength") || "",
+        emailExplanation: formData.get("emailExplanation") || "",
+        urgentHandling: formData.get("urgentHandling") || "",
+        q19: formData.get("q19") || ""
+      };
 
-      setTimeout(() => {
-        form.style.display = "none";
-        document.getElementById("thankYou").classList.add("show");
-      }, 500);
-    }
+      saveResponse(response);
+      form.style.display = "none";
+      thankYouDiv.classList.add("show");
+    });
 
     function isValidEmail(email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(email);
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
+
+    document.getElementById("pinInput").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") checkPin();
+    });
+
+    // Show admin link (barely visible as easter egg)
+    document.getElementById("adminLink").style.display = "block";
   </script>
 </body>
 </html>
