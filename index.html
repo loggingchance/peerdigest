@@ -796,6 +796,9 @@
         q19: formData.get("q19") || ""
       };
 
+      console.log("Form data being sent:", data);
+      console.log("Script URL:", SCRIPT_URL);
+
       try {
         const response = await fetch(SCRIPT_URL, {
           method: "POST",
@@ -806,6 +809,7 @@
           mode: "no-cors"
         });
 
+        console.log("Fetch completed, showing thank you");
         form.style.display = "none";
         thankYouDiv.classList.add("show");
 
