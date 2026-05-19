@@ -773,48 +773,45 @@
       submitBtn.textContent = "Submitting…";
 
       const formData = new FormData(form);
-      const data = {
-        timestamp: new Date().toISOString(),
-        name: formData.get("name"),
-        email: formData.get("email"),
-        q3: formData.get("q3") || "",
-        q4: formData.get("q4") || "",
-        q5: formData.get("q5") || "",
-        q6: formData.get("q6") || "",
-        q7: formData.get("q7") || "",
-        q8: formData.get("q8") || "",
-        q9: formData.get("q9") || "",
-        q10: formData.get("q10") || "",
-        q11: formData.get("q11") || "",
-        q12: formData.get("q12") || "",
-        q13: formData.get("q13") || "",
-        opportunities: formData.getAll("opportunities").join("; ") || "",
-        topics: formData.getAll("topics").join("; ") || "",
-        emailLength: formData.get("emailLength") || "",
-        emailExplanation: formData.get("emailExplanation") || "",
-        urgentHandling: formData.get("urgentHandling") || "",
-        q19: formData.get("q19") || ""
-      };
+      
+      // Build URL parameters instead of JSON
+      const params = new URLSearchParams();
+      params.append("timestamp", new Date().toISOString());
+      params.append("name", formData.get("name"));
+      params.append("email", formData.get("email"));
+      params.append("q3", formData.get("q3") || "");
+      params.append("q4", formData.get("q4") || "");
+      params.append("q5", formData.get("q5") || "");
+      params.append("q6", formData.get("q6") || "");
+      params.append("q7", formData.get("q7") || "");
+      params.append("q8", formData.get("q8") || "");
+      params.append("q9", formData.get("q9") || "");
+      params.append("q10", formData.get("q10") || "");
+      params.append("q11", formData.get("q11") || "");
+      params.append("q12", formData.get("q12") || "");
+      params.append("q13", formData.get("q13") || "");
+      params.append("opportunities", formData.getAll("opportunities").join("; ") || "");
+      params.append("topics", formData.getAll("topics").join("; ") || "");
+      params.append("emailLength", formData.get("emailLength") || "");
+      params.append("emailExplanation", formData.get("emailExplanation") || "");
+      params.append("urgentHandling", formData.get("urgentHandling") || "");
+      params.append("q19", formData.get("q19") || "");
 
-      console.log("Form data being sent:", data);
-      console.log("Script URL:", SCRIPT_URL);
+      console.log("Submitting to:", SCRIPT_URL);
 
       try {
-        const response = await fetch(SCRIPT_URL, {
+        await fetch(SCRIPT_URL, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data),
+          body: params,
           mode: "no-cors"
         });
 
-        console.log("Fetch completed, showing thank you");
+        console.log("Form submitted");
         form.style.display = "none";
         thankYouDiv.classList.add("show");
 
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Submission error:", error);
         errorMessageDiv.textContent = "There was an error submitting your form. Please try again.";
         errorMessageDiv.classList.add("show");
         isSubmitting = false;
