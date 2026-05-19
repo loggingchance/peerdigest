@@ -799,18 +799,14 @@
       try {
         const response = await fetch(SCRIPT_URL, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data),
-          mode: "no-cors"
+          body: JSON.stringify(data)
         });
 
         form.style.display = "none";
         thankYouDiv.classList.add("show");
 
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Submission error:", error);
         errorMessageDiv.textContent = "There was an error submitting your form. Please try again.";
         errorMessageDiv.classList.add("show");
         isSubmitting = false;
