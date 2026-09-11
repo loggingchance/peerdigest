@@ -1,1 +1,1 @@
-$(cat /mnt/data/peer-header.svg)
+Temporary placeholder created during setup. Safe to remove.
