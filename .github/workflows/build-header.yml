@@ -1,0 +1,56 @@
+name: Build Peer Header Image
+
+on:
+  push:
+    paths:
+      - "assets/header-parts/**"
+      - ".github/workflows/build-header.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-header:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Decode header image
+        shell: bash
+        run: |
+          set -euo pipefail
+          manifest="assets/header-parts/manifest.txt"
+          if [ ! -f "$manifest" ]; then
+            echo "No header manifest yet; skipping."
+            exit 0
+          fi
+          expected_parts="$(grep '^parts=' "$manifest" | cut -d= -f2)"
+          expected_sha="$(grep '^sha256=' "$manifest" | cut -d= -f2)"
+          actual_parts="$(ls assets/header-parts/part*.txt 2>/dev/null | wc -l | tr -d ' ')"
+          if [ "$actual_parts" != "$expected_parts" ]; then
+            echo "Have $actual_parts of $expected_parts header parts; skipping until complete."
+            exit 0
+          fi
+          mkdir -p assets
+          cat assets/header-parts/part*.txt | tr -d '\n\r ' | base64 -d > assets/peer-header.jpg
+          echo "$expected_sha  assets/peer-header.jpg" | sha256sum -c -
+
+      - name: Commit generated header image
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f assets/peer-header.jpg ]; then
+            echo "No generated header image to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/peer-header.jpg
+          if git diff --cached --quiet; then
+            echo "Header image already up to date."
+            exit 0
+          fi
+          git commit -m "Build Peer Group Digest header image"
+          git push
