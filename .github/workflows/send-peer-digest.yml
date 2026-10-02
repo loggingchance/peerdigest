@@ -1,0 +1,101 @@
+name: Send Peer Group Digest
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/email_issue.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Resend secret
+        shell: bash
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          if [ -z "$RESEND_API_KEY" ]; then
+            echo "::error::RESEND_API_KEY is not configured for this repository."
+            exit 1
+          fi
+
+      - name: Validate issue payload
+        shell: python
+        run: |
+          import json, sys
+          p = json.load(open("data/email_issue.json", encoding="utf-8"))
+          required = ["date","name","segmentId","from","replyTo","subject","html","text","send"]
+          missing = [k for k in required if k not in p]
+          if missing:
+              raise SystemExit("Missing required fields: " + ", ".join(missing))
+          if p["segmentId"] != "6667e0ec-be0f-4f14-a453-e3804c2cfc33":
+              raise SystemExit("Wrong Peer Group Digest segment")
+          if p["from"] != "Peer Group Digest <no-reply@forestenterprise.org>":
+              raise SystemExit("Wrong sender")
+          if p["subject"] != f"Peer Group Digest — {p['date']}":
+              raise SystemExit("Subject/date mismatch")
+          if not p["send"]:
+              print("Payload validation passed; send=false, no broadcast will be sent.")
+
+      - name: Send broadcast through Resend
+        if: ${{ fromJSON(steps.payload.outputs.send || 'false') }}
+        run: echo "unused"
+
+      - name: Send current issue
+        shell: python
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          import json, os, urllib.request, urllib.error
+          p = json.load(open("data/email_issue.json", encoding="utf-8"))
+          if not p.get("send"):
+              raise SystemExit(0)
+
+          # Duplicate protection: if an exact same-name broadcast is already sent/queued/scheduled, do nothing.
+          req = urllib.request.Request(
+              "https://api.resend.com/broadcasts",
+              headers={"Authorization": f"Bearer {os.environ['RESEND_API_KEY']}"}
+          )
+          with urllib.request.urlopen(req, timeout=30) as r:
+              listing = json.load(r)
+          rows = listing.get("data", listing if isinstance(listing, list) else [])
+          for b in rows:
+              if b.get("name") == p["name"] and b.get("status") in {"sent","queued","scheduled"}:
+                  print("Exact same-name broadcast already active/completed; skipping duplicate.")
+                  raise SystemExit(0)
+
+          body = {
+              "name": p["name"],
+              "segment_id": p["segmentId"],
+              "from": p["from"],
+              "reply_to": p["replyTo"],
+              "subject": p["subject"],
+              "html": p["html"],
+              "text": p["text"],
+              "preview_text": p.get("previewText", ""),
+              "send": True
+          }
+          data = json.dumps(body).encode()
+          req = urllib.request.Request(
+              "https://api.resend.com/broadcasts",
+              data=data,
+              method="POST",
+              headers={
+                  "Authorization": f"Bearer {os.environ['RESEND_API_KEY']}",
+                  "Content-Type": "application/json"
+              }
+          )
+          try:
+              with urllib.request.urlopen(req, timeout=60) as r:
+                  out = json.load(r)
+          except urllib.error.HTTPError as e:
+              print(e.read().decode("utf-8", "replace"))
+              raise
+          print("Broadcast accepted by Resend:", out.get("id", out))
