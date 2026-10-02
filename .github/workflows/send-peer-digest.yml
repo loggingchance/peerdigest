@@ -26,10 +26,12 @@ jobs:
             exit 1
           fi
 
-      - name: Validate issue payload
+      - name: Validate and send current issue
         shell: python
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: |
-          import json, sys
+          import json, os, urllib.request, urllib.error
           p = json.load(open("data/email_issue.json", encoding="utf-8"))
           required = ["date","name","segmentId","from","replyTo","subject","html","text","send"]
           missing = [k for k in required if k not in p]
@@ -42,23 +44,10 @@ jobs:
           if p["subject"] != f"Peer Group Digest — {p['date']}":
               raise SystemExit("Subject/date mismatch")
           if not p["send"]:
-              print("Payload validation passed; send=false, no broadcast will be sent.")
-
-      - name: Send broadcast through Resend
-        if: ${{ fromJSON(steps.payload.outputs.send || 'false') }}
-        run: echo "unused"
-
-      - name: Send current issue
-        shell: python
-        env:
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-        run: |
-          import json, os, urllib.request, urllib.error
-          p = json.load(open("data/email_issue.json", encoding="utf-8"))
-          if not p.get("send"):
+              print("Payload validation passed; send=false, no broadcast sent.")
               raise SystemExit(0)
 
-          # Duplicate protection: if an exact same-name broadcast is already sent/queued/scheduled, do nothing.
+          # Duplicate protection: exact same-name active/completed broadcast means this issue already left the system.
           req = urllib.request.Request(
               "https://api.resend.com/broadcasts",
               headers={"Authorization": f"Bearer {os.environ['RESEND_API_KEY']}"}
@@ -82,10 +71,9 @@ jobs:
               "preview_text": p.get("previewText", ""),
               "send": True
           }
-          data = json.dumps(body).encode()
           req = urllib.request.Request(
               "https://api.resend.com/broadcasts",
-              data=data,
+              data=json.dumps(body).encode(),
               method="POST",
               headers={
                   "Authorization": f"Bearer {os.environ['RESEND_API_KEY']}",
