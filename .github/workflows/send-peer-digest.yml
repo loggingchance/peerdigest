@@ -1,89 +1,69 @@
-name: Send Peer Group Digest
+name: Peer Group send-or-alert
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'data/email_issue.json'
   workflow_dispatch:
+  schedule:
+    # Friday 7:53 AM America/Denver across MDT/MST. Local-time guard skips the other UTC slot.
+    - cron: '53 13 * * 5'
+    - cron: '53 14 * * 5'
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: peer-group-send-or-alert
+  cancel-in-progress: false
 
 jobs:
-  send:
+  deliver:
     runs-on: ubuntu-latest
+    env:
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
-      - name: Validate Resend secret
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Resolve local send slot
+        id: slot
+        shell: python
+        run: |
+          import os
+          from datetime import datetime
+          from zoneinfo import ZoneInfo
+          now = datetime.now(ZoneInfo("America/Denver"))
+          manual = os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
+          ok = manual or (now.weekday() == 4 and now.hour == 7 and now.minute >= 50)
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write("run=" + ("true" if ok else "false") + "\n")
+
+      - name: Validate secret
+        if: steps.slot.outputs.run == 'true'
         shell: bash
-        env:
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: |
           if [ -z "$RESEND_API_KEY" ]; then
             echo "::error::RESEND_API_KEY is not configured for this repository."
             exit 1
           fi
 
-      - name: Validate and send current issue
-        shell: python
-        env:
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      - name: Send current issue or alert
+        id: deliver
+        if: steps.slot.outputs.run == 'true'
+        run: python scripts/send_peer_digest.py
+
+      - name: Commit delivery ledger
+        if: always() && steps.slot.outputs.run == 'true'
+        shell: bash
         run: |
-          import json, os, urllib.request, urllib.error
-          p = json.load(open("data/email_issue.json", encoding="utf-8"))
-          required = ["date","name","segmentId","from","replyTo","subject","html","text","send"]
-          missing = [k for k in required if k not in p]
-          if missing:
-              raise SystemExit("Missing required fields: " + ", ".join(missing))
-          if p["segmentId"] != "6667e0ec-be0f-4f14-a453-e3804c2cfc33":
-              raise SystemExit("Wrong Peer Group Digest segment")
-          if p["from"] != "Peer Group Digest <no-reply@forestenterprise.org>":
-              raise SystemExit("Wrong sender")
-          if p["subject"] != f"Peer Group Digest — {p['date']}":
-              raise SystemExit("Subject/date mismatch")
-          if not p["send"]:
-              print("Payload validation passed; send=false, no broadcast sent.")
-              raise SystemExit(0)
-
-          # Duplicate protection: exact same-name active/completed broadcast means this issue already left the system.
-          req = urllib.request.Request(
-              "https://api.resend.com/broadcasts",
-              headers={"Authorization": f"Bearer {os.environ['RESEND_API_KEY']}"}
-          )
-          with urllib.request.urlopen(req, timeout=30) as r:
-              listing = json.load(r)
-          rows = listing.get("data", listing if isinstance(listing, list) else [])
-          for b in rows:
-              if b.get("name") == p["name"] and b.get("status") in {"sent","queued","scheduled"}:
-                  print("Exact same-name broadcast already active/completed; skipping duplicate.")
-                  raise SystemExit(0)
-
-          body = {
-              "name": p["name"],
-              "segment_id": p["segmentId"],
-              "from": p["from"],
-              "reply_to": p["replyTo"],
-              "subject": p["subject"],
-              "html": p["html"],
-              "text": p["text"],
-              "preview_text": p.get("previewText", ""),
-              "send": True
-          }
-          req = urllib.request.Request(
-              "https://api.resend.com/broadcasts",
-              data=json.dumps(body).encode(),
-              method="POST",
-              headers={
-                  "Authorization": f"Bearer {os.environ['RESEND_API_KEY']}",
-                  "Content-Type": "application/json"
-              }
-          )
-          try:
-              with urllib.request.urlopen(req, timeout=60) as r:
-                  out = json.load(r)
-          except urllib.error.HTTPError as e:
-              print(e.read().decode("utf-8", "replace"))
-              raise
-          print("Broadcast accepted by Resend:", out.get("id", out))
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/delivery-ledger
+          if ! git diff --cached --quiet; then
+            git commit -m "Record Peer Group delivery state"
+            git push origin HEAD:main
+          fi
