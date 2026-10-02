@@ -1,0 +1,14 @@
+{
+  "date": "TEST",
+  "name": "Peer Group Digest — DELIVERY PIPELINE TEST",
+  "segmentId": "6667e0ec-be0f-4f14-a453-e3804c2cfc33",
+  "from": "Peer Group Digest <no-reply@forestenterprise.org>",
+  "replyTo": [
+    "steve@northeastforests.com"
+  ],
+  "subject": "Peer Group Digest — TEST",
+  "previewText": "Pipeline validation only.",
+  "html": "<p>Pipeline validation only.</p>",
+  "text": "Pipeline validation only.",
+  "send": false
+}
