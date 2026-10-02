@@ -18,7 +18,8 @@ jobs:
   deliver:
     runs-on: ubuntu-latest
     env:
-      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}\n      HEALTHCHECKS_URL: ${{ secrets.HC_PEER_GROUP }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      HEALTHCHECKS_URL: ${{ secrets.HC_PEER_GROUP }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -65,6 +66,7 @@ jobs:
           git add data/delivery-ledger
           if ! git diff --cached --quiet; then
             git commit -m "Record Peer Group delivery state"
+            git pull --rebase origin main
             git push origin HEAD:main
           fi
 
