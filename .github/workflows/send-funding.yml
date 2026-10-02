@@ -3,7 +3,6 @@ name: Funding Opportunities send-or-alert
 on:
   workflow_dispatch:
   schedule:
-    # Tuesday 5:07 AM America/Denver across MDT/MST.
     - cron: '7 11 * * 2'
     - cron: '7 12 * * 2'
 
@@ -18,7 +17,8 @@ jobs:
   deliver:
     runs-on: ubuntu-latest
     env:
-      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}\n      HEALTHCHECKS_URL: ${{ secrets.HC_FUNDING }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      HEALTHCHECKS_URL: ${{ secrets.HC_FUNDING }}
       DELIVERY_WORKFLOW: NF LLC Weekly Funding Opportunities
       HANDOFF_PATH: data/handoffs/funding.json
       DELIVERY_TIMEZONE: America/Denver
@@ -61,11 +61,9 @@ jobs:
             git pull --rebase origin main
             git push origin HEAD:main
           fi
-
       - name: Ping external monitor success
         if: success() && steps.slot.outputs.run == 'true' && env.HEALTHCHECKS_URL != ''
         run: curl -fsS --retry 3 --max-time 10 "$HEALTHCHECKS_URL"
-
       - name: Ping external monitor failure
         if: failure() && steps.slot.outputs.run == 'true' && env.HEALTHCHECKS_URL != ''
         run: curl -fsS --retry 3 --max-time 10 "$HEALTHCHECKS_URL/fail"
