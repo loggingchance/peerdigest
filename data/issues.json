@@ -1,44 +1,9 @@
 [
-  {
-    "date": "2026-10-23",
-    "displayDate": "October 23, 2026",
-    "url": "/2026/10/23/",
-    "title": "Peer Group Digest — October 23, 2026",
-    "summary": "A live Vermont working-lands grant, new REAP limits, an intermediary loan path, and specialty-crop market funding."
-  },
-  {
-    "date": "2026-10-16",
-    "displayDate": "October 16, 2026",
-    "url": "/2026/10/16/",
-    "title": "Peer Group Digest — October 16, 2026",
-    "summary": "Federal dyed-diesel relief, current Working Lands grants, service-provider deadlines, and a virtual FIA learning opportunity."
-  },
-  {
-    "date": "2026-10-09",
-    "displayDate": "October 9, 2026",
-    "url": "/2026/10/09/",
-    "title": "Peer Group Digest — October 9, 2026",
-    "summary": "Working Lands applications open, a repeat-sales case, disaster records, and choosing the right grant partnership."
-  },
-  {
-    "date": "2026-10-02",
-    "displayDate": "October 2, 2026",
-    "url": "/2026/10/02/",
-    "title": "Peer Group Digest — October 2, 2026",
-    "summary": "Working Lands grant prep, timber disaster reimbursements, SARE partnership funding, and the 2027 Saver’s Match."
-  },
-  {
-    "date": "2026-09-18",
-    "displayDate": "September 18, 2026",
-    "url": "/2026/09/18/",
-    "title": "Peer Group Digest — September 18, 2026",
-    "summary": "VOREC's project-development pipeline, recurring targeted-grazing contracts, the newly opened Working Lands service-provider round, and using outside business advising before adding overhead."
-  },
-  {
-    "date": "2026-09-11",
-    "displayDate": "September 11, 2026",
-    "url": "/2026/09/11/",
-    "title": "Peer Group Digest — September 11, 2026",
-    "summary": "Working Lands planning, Vermont subcontractor risk, EQIP deadlines, targeted-grazing pricing, trail maintenance packages, stormwater opportunity, and systems thinking."
-  }
+  {"date":"2026-10-30","displayDate":"October 30, 2026","url":"/2026/10/30/","title":"Peer Group Digest — October 30, 2026","summary":"Year-end tax housekeeping, contractor classification, a live Working Lands grant Q&A, and lender-led rural business financing."},
+  {"date":"2026-10-23","displayDate":"October 23, 2026","url":"/2026/10/23/","title":"Peer Group Digest — October 23, 2026","summary":"A live Vermont working-lands grant, new REAP limits, an intermediary loan path, and specialty-crop market funding."},
+  {"date":"2026-10-16","displayDate":"October 16, 2026","url":"/2026/10/16/","title":"Peer Group Digest — October 16, 2026","summary":"Federal dyed-diesel relief, current Working Lands grants, service-provider deadlines, and a virtual FIA learning opportunity."},
+  {"date":"2026-10-09","displayDate":"October 9, 2026","url":"/2026/10/09/","title":"Peer Group Digest — October 9, 2026","summary":"Working Lands applications open, a repeat-sales case, disaster records, and choosing the right grant partnership."},
+  {"date":"2026-10-02","displayDate":"October 2, 2026","url":"/2026/10/02/","title":"Peer Group Digest — October 2, 2026","summary":"Working Lands grant prep, timber disaster reimbursements, SARE partnership funding, and the 2027 Saver’s Match."},
+  {"date":"2026-09-18","displayDate":"September 18, 2026","url":"/2026/09/18/","title":"Peer Group Digest — September 18, 2026","summary":"VOREC's project-development pipeline, recurring targeted-grazing contracts, the newly opened Working Lands service-provider round, and using outside business advising before adding overhead."},
+  {"date":"2026-09-11","displayDate":"September 11, 2026","url":"/2026/09/11/","title":"Peer Group Digest — September 11, 2026","summary":"Working Lands planning, Vermont subcontractor risk, EQIP deadlines, targeted-grazing pricing, trail maintenance packages, stormwater opportunity, and systems thinking."}
 ]
